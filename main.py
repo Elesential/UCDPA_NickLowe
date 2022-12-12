@@ -1,23 +1,28 @@
 
-
+#import Packages
 import pandas as pd
 import numpy as np
 import datetime as dt
 import pycountry
 import plotly.express as px
 
+#import Data
 data = pd.read_csv(r"C:\Users\nlowe\Downloads\aviation_accidents in countries - aviation_accidents.csv")
 num_accidents = data.shape[0] # saving the count of total accidents
 data.head()
 
 print(data)
 
+#How many null values are there within the data
 nulls_count_precentage={ col_name : (data[col_name].isna().sum(),
                                 str( round( 100 * data[col_name].isna().sum() / data.shape[0] ,2))+" %")
                                 for col_name in data.columns}
 print(nulls_count_precentage)
 
+#How many unique values are there within the data
 data.nunique()
+
+#create a function to identify country code for each country
 def get_country_code(country):
     try:
         result = pycountry.countries.search_fuzzy(country)
@@ -27,6 +32,7 @@ def get_country_code(country):
         return result[0].alpha_3
 iso_map = {country: get_country_code(country) for country in data["Country"].unique()}
 
+#Reformating the dataframe keeping details of only the top 15 country and combine all other countries in 'other'
 data["country_code"] = data["Country"].map(iso_map)
 
 countries_df = data.groupby(['Country','country_code']).size().sort_values(ascending=[False])\
@@ -38,6 +44,8 @@ accidents_other = countries_df['count_accidents'][15:].sum()
 df2 = pd.DataFrame([['other','other', accidents_other]], columns=['Country','country_code','count_accidents'])
 countries_df_part=countries_df_part.append(df2)
 
+
+#Create pie chart detaling only the top 15 countries, grouping whats left ito 'other'
 fig = px.pie(countries_df_part,
             values='count_accidents',
             names='Country',
