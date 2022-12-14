@@ -5,7 +5,7 @@ import numpy as np
 import datetime as dt
 import pycountry
 import plotly.express as px
-import matplotlib
+import matplotlib as plt
 
 #import Data sets
 data = pd.read_csv(r"C:\Users\nlowe\Downloads\aviation_accidents in countries - aviation_accidents.csv")
