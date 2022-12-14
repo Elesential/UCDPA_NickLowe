@@ -21,9 +21,6 @@ nulls_count_precentage={ col_name : (data[col_name].isna().sum(),
                                 for col_name in data.columns}
 print(nulls_count_precentage)
 
-#create a bar chart of the number of percentrage of null values
-
-
 #How many unique values are there within the data
 data.nunique()
 
@@ -58,6 +55,7 @@ fig = px.pie(countries_df_part,
 fig.update_traces( textinfo='value+label',textfont_size=10)
 fig.show()
 
+#Create a global view (scatter chart) of the number of accidents by country
 fig = px.scatter_geo(countries_df, locations="country_code",
                      color="Country", # which column to use to set the color of markers
                      hover_name="Country", # column added to hover information
@@ -100,7 +98,7 @@ def result_accident(value):
         return 'Repairable Damage'
 
 
-## Adding 2 columns representing the cause and result of the data individually
+# Adding 2 columns representing the cause and result of the data individually
 causes = categories_filtered['category'].map(cause_accident)
 results = categories_filtered['category'].map(result_accident)
 categories_filtered = pd.concat([categories_filtered, causes, results], axis=1, join="inner")
